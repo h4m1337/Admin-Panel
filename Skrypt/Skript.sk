@@ -1,3 +1,230 @@
-command /pomoc [<text>]:
+function createFiles():
+    set yaml value "Nazwa okna" from file "plugins/SkriptClub/Admin Panel/config.yml" to "&8&l&m+-=---&r  &cADMIN PANEL  &8&l&m---=-+"
+    set yaml value "Nazwa pliku" from file "plugins/SkriptClub/Admin Panel/config.yml" to "Admin Panel.sk"
+    set yaml value "Permisja" from file "plugins/SkriptClub/Admin Panel/config.yml" to "SkriptClub.A-Panel"
+
+    set yaml value "Note" from file "plugins/SkriptClub/Admin Panel/Note.txt" to "Wybaczcie mi że w Format Slocie, ale nie chciało mi sie robić tego inaczej (w set slocie xd)"
+    set yaml value "Autor" from file "plugins/SkriptClub/Admin Panel/Author.yml" to "h4m##0002"
+    set yaml value "Discord" from file "plugins/SkriptClub/Admin Panel/Author.yml" to "dc.zeromc.pl / bot.zeromc.pl / dsc.gg/skriptclub"
+    
+    set yaml value "Discord Bot" from file "plugins/SkriptClub/Admin Panel/config.yml" to "w next update :))"
+    set yaml value "Case" from file "plugins/SkriptClub/Admin Panel/config.yml" to "w next update :))"
+    set yaml value "AutoUpdate" from file "plugins/SkriptClub/Admin Panel/config.yml" to "ON"
+
+function varConfig():
+    set {AutoUpdate} to yaml value "AutoUpdate" from file "plugins/SkriptClub/Admin Panel/config.yml"
+    set {GuiName} to yaml value "Nazwa okna" from file "plugins/SkriptClub/Admin Panel/config.yml"
+    set {FileName} to yaml value "Nazwa pliku" from file "plugins/SkriptClub/Admin Panel/config.yml"
+    set {Pex} to yaml value "Permisja" from file "plugins/SkriptClub/Admin Panel/config.yml"
+
+on load:
+    if "plugins/SkriptClub/Admin Panel/config.yml" doesn't exist:
+        createFiles()
+    else:
+        varConfig()
+
+on load: # AutoUpdate:
+    varConfig()
+    if {AutoUpdate} is "ON":
+        set {current} to "1.0"
+        set {update} to text from url "https://raw.githubusercontent.com/h4m1337/Admin-Panel/main/Skrypt/Version.txt"
+        if {update} is not {current}:
+            download file from "https://raw.githubusercontent.com/h4m1337/Admin-Panel/main/Skrypt/Skript.sk" to file "plugins/Skript/scripts/%{FileName}%"
+            execute console command "skript reload %{FileName}%"
+            send "&8[ &3ADMIN-&bPANEL &8]   &bTrwa pobieranie &3aktualizacji&b.." to console
+            wait 1 tick
+            send "&8[ &3ADMIN-&bPANEL &8]   &bPoprawnie pobrano &3aktualizacje&b." to console
+            send "&8[ &3ADMIN-&bPANEL &8]   &bAktualna wersja: &3%{current}%" to console
+            stop
+        else:
+            send "&8[ &3ADMIN-&bPANEL &8]   &bAdmin panel jest &3aktualny&b." to console
+            stop
+    else:
+        send "&8[ &3ADMIN-&bPANEL &8]   &bAdmin panel jest &3nie aktualny&b." to console
+        send "&8[ &3ADMIN-&bPANEL &8]   &bUstaw w &3config.yml&b autoUpdate na &3'ON'&b," to console
+        send "&8[ &3ADMIN-&bPANEL &8]   &bA nastepnie &3przeladuj&b skrypt!!" to console
+        stop
+
+variables:
+    {Kit.Status} = "ON"
+    {Fizyka.Status} = "ON"
+    {PVP.Status} = "ON"
+    {SETY.Status} = "ON"
+    {SETY.Diamond.Status} = "ON"
+    {Perly.Status} = "ON"
+
+command /admin-panel [<text>]:
     trigger:
-        send "mam małego" to player
+        if player has permission "%{Pex}%":
+            set {_s} to 0
+            open chest with 4 rows named "%{GuiName}%" to player
+            loop 9*4 times:
+                format slot {_s} of player with gray stained glass pane named "&8*" to be unstealable
+                add 1 to {_s}
+            format slot 10 of player with sand named "&8&l•  &m-=-&r  &3&lFIZYKA  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie fizyki &bPiasku, Gravelu, Kowadla&7.%nl%%nl%&7Aktualny status:  &b%{Fizyka.Status}%" to close then run [execute player command "panel1 fizyka"]
+            format slot 12 of player with netherite chestplate named "&8&l•  &m-=-&r  &3&lSETY  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &bCraftowania netherite setów&7.%nl%%nl%&7Aktualny status:  &b%{SETY.Status}%" to close then run [execute player command "panel1 netherite"]
+            format slot 24 of player with diamond sword named "&8&l•  &m-=-&r  &3&lPVP  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &bPVP&7 miedzy &bgraczami&7.%nl%%nl%&7Aktualny status:  &b%{PVP.Status}%" to close then run [execute player command "panel1 pvp"]
+            format slot 16 of player with cooked porkchop named "&8&l•  &m-=-&r  &3&lKITY  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &bkomendy /kit&7.%nl%%nl%&7Aktualny status:  &b%{Kit.Status}%" to close then run [execute player command "panel1 kity"]
+
+            format slot 20 of player with ender pearl named "&8&l•  &m-=-&r  &3&lPERLY  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &buzywania perel&7.%nl%%nl%&7Aktualny status:  &b%{Perly.Status}%" to close then run [execute player command "panel1 perly"]
+            format slot 31 of player with book named "&8&l•  &m-=-&r  &3&lZMIANY  &8&l&m-=-&8&l  •" with lore "   &7Co sie zmienilo w wersji &b&n%{current}%&7?%nl%  &8&l•  &7Wypuszczenie &bskryptu&7.%nl%  &8&l•  &bAuto-Update&7.%nl%%nl%    &7Co jest do zrobienia?%nl%  &8&l•  &7Napisanie oddzielnego &3eventu&7 dla &bFIZYKI&7.%nl%  &8&l•  &7Poprawienie calkowitej &bwydajnosci Skryptu&7." to be unstealable
+            format slot 14 of player with diamond chestplate named "&8&l•  &m-=-&r  &3&lSETY  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &bCraftowania diamentowych setów&7.%nl%%nl%&7Aktualny status:  &b%{SETY.Diamond.Status}%" to close then run [execute player command "panel1 diamond"]
+            stop
+
+command /panel1 [<text>]:
+    trigger:
+        if player has permission {Pex}:
+            if arg 1 is "diamond":
+                if {SETY.Diamond.Status} = "ON":
+                    set {SETY.Diamond.Status} to "OFF"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Craftowanie &bdiamentowych setów&7 zostało &3WYŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+                else:
+                    set {SETY.Diamond.Status} to "ON"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Craftowanie &bdiamentowych setów&7 zostało &3WŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+
+            if arg 1 is "fizyka":
+                if {Fizyka.Status} = "ON":
+                    set {Fizyka.Status} to "OFF"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Fizyka &bpiasku, gravelu, kowadla&7 została &3WYŁĄCZONA&7." to all players
+                    send "" to all players
+                    stop
+                else:
+                    set {Fizyka.Status} to "ON"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Fizyka &bpiasku, gravelu, kowadla&7 została &3WŁĄCZONA" to all players
+                    send "" to all players
+                    stop
+
+            if arg 1 is "netherite":
+                if {SETY.Status} = "ON":
+                    set {SETY.Status} to "OFF"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Craftowanie &bnetherite setów&7 zostało &3WYŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+                else:
+                    set {SETY.Status} to "ON"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Craftowanie &bnetherite setów&7 zostało &3WŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+
+            if arg 1 is "PVP":
+                if {PVP.Status} = "ON":
+                    set {PVP.Status} to "OFF"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7PVP &7miedzy &bgraczami&7 zostało &3WYŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+                else:
+                    set {PVP.Status} to "ON"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7PVP &7miedzy &bgraczami&7 zostało &3WYŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+
+            if arg 1 is "Perly":
+                if {Perly.Status} = "ON":
+                    set {Perly.Status} to "OFF"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Rzucanie &bperel&7 zostało &3WYŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+                else:
+                    set {Perly.Status} to "ON"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Rzucanie &bperel setów&7 zostało &3WŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+
+            if arg 1 is "Kity":
+                if {Kit.Status} = "ON":
+                    set {Kit.Status} to "OFF"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Komenda &b/kit&7 została &3WYŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+                else:
+                    set {Kit.Status} to "ON"
+                    send "" to all players
+                    send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to all players
+                    send "" to all players
+                    send "     &8&l•  &7Komenda &b/kit&7 została &3WŁĄCZONE&7." to all players
+                    send "" to all players
+                    stop
+
+command /zaladuj [<text>]:
+    trigger:
+        if player has permission "SkriptClub.zaladuj":
+            if "plugins/SkriptClub/Admin Panel/config.yml" doesn't exist:
+                createFiles()
+                send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to player
+                send "" to player
+                send "     &8&l•  &7Zaladowano poprawnie plik &b&nconfig.yml&7." to player
+                send "" to player
+                varConfig()
+                stop
+            else:
+                varConfig()
+                send "    &8&l&m+-=-----&r  &3&lADMIN PANEL  &8&l&m-----=-+&r" to player
+                send "" to player
+                send "     &8&l•  &7Zaladowano poprawnie plik &b&nconfig.yml&7." to player
+                send "" to player
+                stop
+        else:
+            send "&cNie mozesz uzyc tego polecenia.." to player
+            stop
+
+on craft:
+    if event-item's type is any diamond armor: 
+        if {SETY.Diamond.Status} = "OFF":
+            send player title "&8&l&m+-=----&r  &3BLOKADA  &8&l&m----=-+&r" with subtitle "&bCrafting &3diamentowego Seta&b jest zablokowany." for 5 seconds
+            cancel event
+
+on damage of player:
+    if attacker is player:
+        if {PVP.Status} = "OFF":
+            send attacker title "&8&l&m+-=----&r  &3BLOKADA  &8&l&m----=-+&r" with subtitle "&bNa naszym serwerze &3PVP&b jest wylaczone." for 5 seconds
+            cancel event
+            stop
+
+on rightclick with ender pearl:
+    if {Perly.Status} = "OFF":
+        send player title "&8&l&m+-=----&r  &3BLOKADA  &8&l&m----=-+&r" with subtitle "&bNa naszym serwerze &3RZUCANIE PEREL&b jest wylaczone." for 5 seconds
+        cancel event
+        stop
+
+on command "kit" or "zestawy" or "kity":
+    if {Kit.Status} = "OFF":
+        send player title "&8&l&m+-=----&r  &3BLOKADA  &8&l&m----=-+&r" with subtitle "&bTa komenda zostala &3zablokowana&b." for 5 seconds
+        cancel event
+        stop
