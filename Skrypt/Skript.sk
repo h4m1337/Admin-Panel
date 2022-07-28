@@ -1,0 +1,3 @@
+command /pomoc [<text>]:
+    trigger:
+        send "mam małego" to player
