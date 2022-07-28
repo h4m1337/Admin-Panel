@@ -1,8 +1,3 @@
-# Admin-Panel
-Skrypt stworzony dla: SkriptClub
-
-
-Discord: dsc.gg/skriptclub
-Discord z najlepszymi Botami minecraft: https://bot.zeromc.pl/
-Discord z najlepszymi botami discord na zamówienie: https://dc.zeromc.pl/
-(Darmowe od 10 zaproszeń!)
+☁ Admin Panel, to skrypt z konfiguracją w pliku config.yml.
+🧾 Wyróżnia się on tym, że jest ciągle aktualizowany, oraz coraz bardziej ulepszany.
+🚀 Dodaj go na swój serwer, a nie pożałujesz (:
