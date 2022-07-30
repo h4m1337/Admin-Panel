@@ -1,15 +1,17 @@
 function createFiles():
-    set yaml value "Nazwa okna" from file "plugins/SkriptClub/Admin Panel/config.yml" to "&8&l&m+-=---&r  &cADMIN PANEL  &8&l&m---=-+"
-    set yaml value "Nazwa pliku" from file "plugins/SkriptClub/Admin Panel/config.yml" to "Admin Panel.sk"
-    set yaml value "Permisja" from file "plugins/SkriptClub/Admin Panel/config.yml" to "SkriptClub.A-Panel"
+    create file "plugins/SkriptClub/Admin Panel/config.yml"
+    create file "plugins/SkriptClub/Admin Panel/Author.yml"
+    set yml value "Nazwa okna" from file "plugins/SkriptClub/Admin Panel/config.yml" to "&8&l&m+-=---&r  &cADMIN PANEL  &8&l&m---=-+"
+    set yml value "Nazwa pliku" from file "plugins/SkriptClub/Admin Panel/config.yml" to "Admin Panel.sk"
+    set yml value "Permisja" from file "plugins/SkriptClub/Admin Panel/config.yml" to "SkriptClub.A-Panel"
 
-    set yaml value "Note" from file "plugins/SkriptClub/Admin Panel/Note.txt" to "Wybaczcie mi że w Format Slocie, ale nie chciało mi sie robić tego inaczej (w set slocie xd)"
-    set yaml value "Autor" from file "plugins/SkriptClub/Admin Panel/Author.yml" to "h4m##0002"
-    set yaml value "Discord" from file "plugins/SkriptClub/Admin Panel/Author.yml" to "dc.zeromc.pl / bot.zeromc.pl / dsc.gg/skriptclub"
+    set yml value "Note" from file "plugins/SkriptClub/Admin Panel/Note.txt" to "Wybaczcie mi że w Format Slocie, ale nie chciało mi sie robić tego inaczej (w set slocie xd)"
+    set yml value "Autor" from file "plugins/SkriptClub/Admin Panel/Author.yml" to "h4m##0002"
+    set yml value "Discord" from file "plugins/SkriptClub/Admin Panel/Author.yml" to "dc.zeromc.pl / bot.zeromc.pl / dsc.gg/skriptclub"
     
-    set yaml value "Discord Bot" from file "plugins/SkriptClub/Admin Panel/config.yml" to "w next update :))"
-    set yaml value "Case" from file "plugins/SkriptClub/Admin Panel/config.yml" to "w next update :))"
-    set yaml value "AutoUpdate" from file "plugins/SkriptClub/Admin Panel/config.yml" to "ON"
+    set yml value "Discord Bot" from file "plugins/SkriptClub/Admin Panel/config.yml" to "w next nowa :))"
+    set yml value "Case" from file "plugins/SkriptClub/Admin Panel/config.yml" to "w next nowa :))"
+    set yml value "AutoUpdate" from file "plugins/SkriptClub/Admin Panel/config.yml" to "ON"
 
 function varConfig():
     set {AutoUpdate} to yaml value "AutoUpdate" from file "plugins/SkriptClub/Admin Panel/config.yml"
@@ -18,30 +20,30 @@ function varConfig():
     set {Pex} to yaml value "Permisja" from file "plugins/SkriptClub/Admin Panel/config.yml"
 
 on load:
-    if "plugins/SkriptClub/Admin Panel/config.yml" doesn't exist:
-        createFiles()
-    else:
+    if file "plugins/SkriptClub/Admin Panel" exists:
         varConfig()
+    else:
+        createFiles()
 
 on load: # AutoUpdate:
     varConfig()
     if {AutoUpdate} is "ON":
-        set {current} to "1.0"
-        set {update} to text from url "https://raw.githubusercontent.com/h4m1337/Admin-Panel/main/Skrypt/Version.txt"
-        if {update} is not {current}:
+        set {aktualna} to "1.0"
+        set {nowa} to text from url "https://raw.githubusercontent.com/h4m1337/Admin-Panel/main/Skrypt/Version.txt"
+        if {nowa} is not {akutalna}:
             download file from "https://raw.githubusercontent.com/h4m1337/Admin-Panel/main/Skrypt/Skript.sk" to file "plugins/Skript/scripts/%{FileName}%"
             execute console command "skript reload %{FileName}%"
             send "&8[ &3ADMIN-&bPANEL &8]   &bTrwa pobieranie &3aktualizacji&b.." to console
             wait 1 tick
             send "&8[ &3ADMIN-&bPANEL &8]   &bPoprawnie pobrano &3aktualizacje&b." to console
-            send "&8[ &3ADMIN-&bPANEL &8]   &bAktualna wersja: &3%{current}%" to console
+            send "&8[ &3ADMIN-&bPANEL &8]   &bAktualna wersja: &3%{aktualna}%" to console
             stop
         else:
             send "&8[ &3ADMIN-&bPANEL &8]   &bAdmin panel jest &3aktualny&b." to console
             stop
     else:
         send "&8[ &3ADMIN-&bPANEL &8]   &bAdmin panel jest &3nie aktualny&b." to console
-        send "&8[ &3ADMIN-&bPANEL &8]   &bUstaw w &3config.yml&b autoUpdate na &3'ON'&b," to console
+        send "&8[ &3ADMIN-&bPANEL &8]   &bUstaw w &3config.yml&b autonowa na &3'ON'&b," to console
         send "&8[ &3ADMIN-&bPANEL &8]   &bA nastepnie &3przeladuj&b skrypt!!" to console
         stop
 
@@ -67,7 +69,7 @@ command /admin-panel [<text>]:
             format slot 16 of player with cooked porkchop named "&8&l•  &m-=-&r  &3&lKITY  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &bkomendy /kit&7.%nl%%nl%&7Aktualny status:  &b%{Kit.Status}%" to close then run [execute player command "panel1 kity"]
 
             format slot 20 of player with ender pearl named "&8&l•  &m-=-&r  &3&lPERLY  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &buzywania perel&7.%nl%%nl%&7Aktualny status:  &b%{Perly.Status}%" to close then run [execute player command "panel1 perly"]
-            format slot 31 of player with book named "&8&l•  &m-=-&r  &3&lZMIANY  &8&l&m-=-&8&l  •" with lore "   &7Co sie zmienilo w wersji &b&n%{current}%&7?%nl%  &8&l•  &7Wypuszczenie &bskryptu&7.%nl%  &8&l•  &bAuto-Update&7.%nl%%nl%    &7Co jest do zrobienia?%nl%  &8&l•  &7Napisanie oddzielnego &3eventu&7 dla &bFIZYKI&7.%nl%  &8&l•  &7Poprawienie calkowitej &bwydajnosci Skryptu&7." to be unstealable
+            format slot 31 of player with book named "&8&l•  &m-=-&r  &3&lZMIANY  &8&l&m-=-&8&l  •" with lore "   &7Co sie zmienilo w wersji &b&n%{aktualna}%&7?%nl%  &8&l•  &7Wypuszczenie &bskryptu&7.%nl%  &8&l•  &bAuto-nowa&7.%nl%%nl%    &7Co jest do zrobienia?%nl%  &8&l•  &7Napisanie oddzielnego &3eventu&7 dla &bFIZYKI&7.%nl%  &8&l•  &7Poprawienie calkowitej &bwydajnosci Skryptu&7." to be unstealable
             format slot 14 of player with diamond chestplate named "&8&l•  &m-=-&r  &3&lSETY  &8&l&m-=-&8&l  •" with lore "&7Ta &bfunkcja&7 pozwala na:%nl%%nl% &8&l•  &7wlaczenie/wylaczenie &bCraftowania diamentowych setów&7.%nl%%nl%&7Aktualny status:  &b%{SETY.Diamond.Status}%" to close then run [execute player command "panel1 diamond"]
             stop
 
